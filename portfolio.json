@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "orbit-lab-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "workflows": [
+    "Create an agent run with a prompt and worktree allocation",
+    "List and filter agent runs by state and agent",
+    "Cancel a running agent run and audit the lifecycle"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "summary": "Work in progress: orbit-lab-alan-vo",
+  "status": "work-in-progress"
+}

@@ -1,0 +1,54 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - db_data:/data
+      - ./orbit_lab.db:/data/orbit_lab.db
+    environment:
+      - DATABASE_URL=sqlite:////data/orbit_lab.db
+      - ENVIRONMENT=development
+      - ORBIT_WORKTREE_BASE=/tmp/orbit-worktrees
+      - AUTH_ENABLED=false
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_interval: 5s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - VITE_API_URL=http://127.0.0.1:8000
+    depends_on:
+      - backend
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7
+    command: ["start-dev", "--import-realm"]
+    init: true
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_interval: 10s
+
+volumes:
+  db_data:
+  keycloak_data:
