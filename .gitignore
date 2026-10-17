@@ -1,0 +1,39 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage/
+
+# Node
+node_modules/
+dist/
+
+# Database
+*.db
+*.sqlite
+orbit_lab.db
+
+# Environment
+.env
+.env.local
+
+# Local agent metadata (not product source)
+.antigravitycli/
+.omp/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,1 @@
+{"compilerOptions":{"lib":["ES2024","DOM"],"skipLibCheck":true,"module":"ESNext","target":"ESNext","isolatedModules":true,"noEmit":true,"moduleResolution":"Node","allowJs":true,"composite":true},"include":["vite.config.ts"]}
