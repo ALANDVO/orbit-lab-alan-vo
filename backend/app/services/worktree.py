@@ -24,7 +24,11 @@ def repo_slug(repo_url: str) -> str:
 
 def worktree_base_dir() -> str:
     """Base directory for worktrees — configurable via env."""
-    return os.environ.get("ORBIT_WORKTREE_BASE", "/tmp/orbit-worktrees")
+    base = os.environ.get("ORBIT_WORKTREE_BASE", "/tmp/orbit-worktrees")
+    if not base:
+        base = "/tmp/orbit-worktrees"
+    # Ensure absolute path
+    return os.path.abspath(base)
 
 
 def allocate_worktree_path(run_id: str, repo_url: str, existing: set[str] | None = None) -> str:
@@ -68,6 +72,9 @@ def validate_worktree_path(path: str) -> bool:
     abs_path = os.path.abspath(path)
     abs_base = os.path.abspath(base)
     # Must be within base directory (prevent path traversal)
+    # Allow the base directory itself as valid
+    if abs_path == abs_base:
+        return True
     if not abs_path.startswith(abs_base + os.sep):
         return False
     # Must not contain traversal components

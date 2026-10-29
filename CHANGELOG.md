@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.0.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -20,6 +24,10 @@ All notable changes to Orbit Lab are documented here.
 - **CI pipeline** — backend pytest, frontend typecheck/build/test, and Docker build checks
 - **61 backend tests** covering domain logic (allocation uniqueness, state machine transitions, audit logging), API boundary tests, and HTTP integration
 - **15 frontend tests** covering user-visible behavior (state badges, form submission, run list rendering)
+
+### Fixed
+- **Worktree base directory validation** — `worktree_base_dir()` now validates the `ORBIT_WORKTREE_BASE` environment variable, ensuring it's an absolute path and falling back to the default when empty
+- **Worktree path validation** — `validate_worktree_path()` now correctly accepts the base directory itself as valid, not just subdirectories
 
 ### Planned (future milestones)
 - OIDC authentication via Keycloak (viewer/operator/admin roles)
