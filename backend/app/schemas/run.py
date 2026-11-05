@@ -33,11 +33,14 @@ class RunRead(BaseModel):
     worktree_path: str
     state: RunState
     error_message: Optional[str] = None
+    # Execution tracking
+    pid: Optional[str] = None
+    exit_code: Optional[str] = None
+    duration_seconds: Optional[float] = None
     created_at: datetime
     started_at: Optional[datetime] = None
     finished_at: Optional[datetime] = None
     updated_at: datetime
-
 
 class AuditEntryRead(BaseModel):
     """Public representation of an audit log entry."""
