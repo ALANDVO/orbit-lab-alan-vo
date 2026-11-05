@@ -3,10 +3,10 @@ from __future__ import annotations
 
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
 
-from app.core.database import get_db
+from app.core.database import get_db, SessionLocal
 from app.models.run import Run, RunState
 from app.schemas.run import (
     RunCreate,
@@ -19,6 +19,7 @@ from app.services.run import (
     RunNotFoundError,
     RunService,
 )
+from app.services.execution import ExecutionService
 
 router = APIRouter(prefix="/api/runs", tags=["runs"])
 
@@ -26,6 +27,15 @@ router = APIRouter(prefix="/api/runs", tags=["runs"])
 def get_service(db: Session = Depends(get_db)) -> RunService:
     """Dependency that provides a RunService instance."""
     return RunService(db)
+
+
+def get_exec_service() -> ExecutionService:
+    """Dependency that provides an ExecutionService instance."""
+    db = SessionLocal()
+    try:
+        return ExecutionService(db)
+    finally:
+        db.close()
 
 
 @router.post("/", response_model=RunRead, status_code=status.HTTP_201_CREATED)
@@ -140,3 +150,66 @@ def fail_run(
             detail=str(e),
         )
     return run
+
+
+# Execution endpoints
+
+@router.post("/{run_id}/execute", response_model=RunRead)
+async def execute_run(
+    run_id: str,
+    exec_service: ExecutionService = Depends(get_exec_service),
+):
+    """Execute an agent run (spawns worktree, runs agent, updates state)."""
+    try:
+        run = await exec_service.execute_run(run_id)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
+    except RunNotFoundError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Run not found: {run_id}",
+        )
+    except InvalidStateTransition as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
+        )
+    return run
+
+
+@router.websocket("/{run_id}/stream")
+async def stream_run(
+    websocket: WebSocket,
+    run_id: str,
+):
+    """WebSocket endpoint for streaming run output."""
+    db = SessionLocal()
+    try:
+        await websocket.accept()
+        
+        exec_service = ExecutionService(db)
+        
+        async def on_output(stream: str, line: str):
+            await websocket.send_json({
+                "stream": stream,
+                "line": line,
+            })
+        
+        await exec_service.execute_run(run_id, on_output=on_output)
+        await websocket.send_json({"event": "completed"})
+    except ValueError as e:
+        await websocket.send_json({"event": "error", "detail": str(e)})
+    except RunNotFoundError:
+        await websocket.send_json({"event": "error", "detail": f"Run not found: {run_id}"})
+    except InvalidStateTransition as e:
+        await websocket.send_json({"event": "error", "detail": str(e)})
+    except WebSocketDisconnect:
+        pass
+    except Exception as e:
+        await websocket.send_json({"event": "error", "detail": f"Execution failed: {str(e)}"})
+    finally:
+        db.close()
+        await websocket.close()

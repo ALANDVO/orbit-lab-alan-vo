@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-agent-runs
+run-execution
 
 ## Roadmap
 
@@ -21,18 +21,22 @@ Acceptance:
 - Run lifecycle enforces valid state transitions (pending -> running -> completed/failed/cancelled)
 - All mutations are audited with UTC timestamps and user context
 
-Implementation: `backend/app/main.py`, `backend/app/core/config.py`, `backend/app/core/database.py`, `backend/app/models/run.py`, `backend/app/models/audit.py`, `backend/app/schemas/run.py`, `backend/app/services/worktree.py`, `backend/app/services/run.py`, `backend/app/api/runs.py`, `frontend/src/api/client.ts`, `frontend/src/api/types.ts`, `frontend/src/hooks/useRuns.ts`, `frontend/src/components/RunList.tsx`, `frontend/src/components/RunForm.tsx`, `frontend/src/components/RunDetail.tsx`, `frontend/src/components/RunStatusControls.tsx`, `frontend/src/components/StateBadge.tsx`, `frontend/src/pages/RunsPage.tsx`, `frontend/src/pages/RunDetailPage.tsx`, `frontend/src/lib/format.ts`, `frontend/src/lib/runState.ts`
+Implementation: `backend/app/main.py`, `backend/app/core/config.py`, `backend/app/core/database.py`, `backend/app/models/run.py`, `backend/app/models/audit.py`, `backend/app/schemas/run.py`, `backend/app/services/worktree.py`, `backend/app/services/run.py`, `backend/app/api/runs.py`, `frontend/src/api/client.ts`, `frontend/src/api/types.ts`, `frontend/src/hooks/useRuns.ts`, `frontend/src/components/RunList.tsx`, `frontend/src/components/RunForm.tsx`, `frontend/src/components/RunDetail.tsx`, `backend/app/services/worktree.py`, `backend/app/services/run.py`, `backend/app/api/runs.py`, `frontend/src/components/RunStatusControls.tsx`, `frontend/src/components/StateBadge.tsx`, `frontend/src/pages/RunsPage.tsx`, `frontend/src/pages/RunDetailPage.tsx`, `frontend/src/lib/format.ts`, `frontend/src/lib/runState.ts`
 
 Tests: `backend/tests/test_worktree_service.py`, `backend/tests/test_run_service.py`, `backend/tests/test_api_runs.py`, `backend/tests/conftest.py`, `frontend/src/components/RunList.test.tsx`, `frontend/src/components/RunForm.test.tsx`, `frontend/src/components/StateBadge.test.tsx`
 
 ### run-execution — Agent Run Execution Engine
 
-Status: planned
+Status: done
 
 Acceptance:
 - Service spawns isolated git worktree for the agent run
 - Backend streams agent stdout/stderr via WebSocket
 - Agent completion updates run state and records duration
+
+Implementation: `backend/app/services/execution.py`, `backend/app/api/runs.py`, `backend/app/models/run.py`, `backend/app/schemas/run.py`
+
+Tests: `backend/tests/test_execution_service.py`
 
 ### auth-oidc — OIDC Authentication
 

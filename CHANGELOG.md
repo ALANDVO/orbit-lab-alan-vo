@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.1.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -35,3 +39,14 @@ All notable changes to Orbit Lab are documented here.
 - Run execution engine (actual agent spawning with worktree creation)
 - Diff annotation workflow
 - Mobile companion integration
+
+## [1.1.0] — 2025-11-05
+
+### Added
+- **Agent Run Execution Engine** — Service that spawns isolated git worktrees for agent runs, executes agent processes, and tracks execution state
+- **WebSocket streaming endpoint** — `GET /api/runs/{id}/stream` provides real-time stdout/stderr streaming from running agents
+- **Execute API endpoint** — `POST /api/runs/{id}/execute` triggers full execution lifecycle (worktree creation → agent spawn → completion)
+- **Execution tracking fields** — Added `pid`, `exit_code`, and `duration_seconds` to Run model for monitoring agent runs
+- **Git worktree isolation** — Each run gets a dedicated branch (`orbit-{run_id}`) in a separate worktree directory
+- **Local repository support** — Execution service handles both remote URLs and local repository paths
+- **Comprehensive test coverage** — 9 new tests for execution service covering worktree preparation, execution success/failure, cancellation, and state validation

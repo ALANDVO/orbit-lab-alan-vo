@@ -4,7 +4,7 @@ from __future__ import annotations
 import enum
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, DateTime, Enum, String, Text
+from sqlalchemy import Column, DateTime, Enum, Float, String, Text
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -43,6 +43,11 @@ class Run(Base):
     worktree_path = Column(String(512), nullable=False, unique=True)
     state = Column(Enum(RunState), nullable=False, default=RunState.PENDING, index=True)
     error_message = Column(Text, nullable=True)
+
+    # Execution tracking
+    pid = Column(String(32), nullable=True)
+    exit_code = Column(String(8), nullable=True)
+    duration_seconds = Column(Float, nullable=True)
 
     created_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc))
     started_at = Column(DateTime(timezone=True), nullable=True)
