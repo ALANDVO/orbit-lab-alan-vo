@@ -66,3 +66,6 @@ Acceptance:
 - Send feedback back to agent prompt
 - Track resolution status
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

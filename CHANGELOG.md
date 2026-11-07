@@ -50,3 +50,7 @@ All notable changes to Orbit Lab are documented here.
 - **Git worktree isolation** — Each run gets a dedicated branch (`orbit-{run_id}`) in a separate worktree directory
 - **Local repository support** — Execution service handles both remote URLs and local repository paths
 - **Comprehensive test coverage** — 9 new tests for execution service covering worktree preparation, execution success/failure, cancellation, and state validation
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

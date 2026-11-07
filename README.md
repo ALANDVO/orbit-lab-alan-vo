@@ -190,3 +190,7 @@ frontend/
 Orbit Lab — AI orchestrator for a fleet of coding agents.
 
 Alan Vo <alanvo@gmail.com> | [MIT License](./LICENSE)
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
