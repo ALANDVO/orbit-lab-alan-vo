@@ -5,7 +5,7 @@
 
 Orbit Lab is an AI orchestrator for fleets of coding agents. The concrete problem it addresses is **fragmented agent execution**: when developers run multiple coding agents (Codex, Claude Code, OpenCode, etc.) against the same codebase, results scatter across terminals, diff views, and chat logs with no central tracking. Orbit Lab's approach is to provision an isolated git worktree per agent run, assign a deterministic worktree path via a content-derived allocation algorithm, and drive each run through an auditable state machine so outcomes remain comparable and reproducible. The intended user is any developer or team running more than one agent at a time and needing to compare results.
 
-> **Round 1 complete:** This round delivers agent run management — create, list (with filtering and pagination), view details with full audit trail, and cancel runs. Each run is allocated a deterministic worktree path and driven through an auditable lifecycle state machine. Actual agent execution, OIDC authentication, and LLM provider adapters are planned milestones (see [STATUS.md](./STATUS.md)).
+> **Round 1 complete:** This round delivers agent run management — create, list (with filtering and pagination), view details with full audit trail, and cancel runs. Each run is allocated a deterministic worktree path and driven through an auditable lifecycle state machine. **Execute button added to run detail page for triggering agent execution.** Actual agent execution, OIDC authentication, and LLM provider adapters are planned milestones (see [STATUS.md](./STATUS.md)).
 
 ## AI/ML evaluation
 
@@ -52,13 +52,11 @@ graph LR
     LLM -.-> BE
 ```
 
-## Features
-
 - **Agent run management** — Create runs with an agent identifier, repository URL, prompt, and optional branch. Each run is assigned a deterministic, unique worktree path.
 - **Auditable lifecycle** — Runs transition through `pending → running → completed/failed/cancelled`. Every mutation is recorded in an audit log with UTC timestamps and actor context.
 - **Worktree allocation engine** — Content-derived paths from repo URL and run ID, with collision detection and path-traversal protection.
 - **Filtering & pagination** — List runs filtered by state or agent, with limit/offset pagination.
-- **Web UI** — React dashboard with create form, run list, and detail view showing the full audit trail.
+- **Web UI** — React dashboard with create form, run list, and detail view showing the full audit trail. **Execute button on run detail page triggers agent execution via backend endpoint.**
 
 ## Install
 
@@ -100,6 +98,7 @@ docker compose up --build
 | `POST` | `/api/runs/{id}/complete` | Transition to `completed` |
 | `POST` | `/api/runs/{id}/fail?error_message=...` | Transition to `failed` |
 | `DELETE` | `/api/runs/{id}` | Cancel a pending/running run → 409 if terminal |
+| `POST` | `/api/runs/{id}/execute` | Execute agent run (spawns worktree, runs agent, updates state) |
 | `GET` | `/health` | Health check |
 
 ## Security limitations

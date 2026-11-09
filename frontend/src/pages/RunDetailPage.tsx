@@ -40,6 +40,16 @@ export default function RunDetailPage() {
     }
   };
 
+
+  const handleExecute = async () => {
+    try {
+      await api.executeRun(runId!);
+      window.location.reload();
+    } catch (e) {
+      setActionError(e instanceof Error ? e.message : "Unknown error");
+    }
+  };
+
   const handleCancel = async () => {
     try {
       await api.cancelRun(runId!);
@@ -58,6 +68,7 @@ export default function RunDetailPage() {
           onComplete={handleComplete}
           onFail={handleFail}
           onCancel={handleCancel}
+          onExecute={handleExecute}
           error={actionError}
         />
       )}

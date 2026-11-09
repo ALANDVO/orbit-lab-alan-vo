@@ -1,8 +1,15 @@
 # Changelog
 
+## 1.3.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.2.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
+
+### Added
+- **Frontend Execute button** — Added "Execute" button to run detail page for pending runs, connecting the existing backend execution endpoint (`POST /api/runs/{id}/execute`) to the UI. Includes `executeRun` API client function and updated `RunStatusControls` component.
 
 ## 1.1.0 — work-in-progress checkpoint
 
