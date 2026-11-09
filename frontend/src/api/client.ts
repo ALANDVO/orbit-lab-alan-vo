@@ -61,6 +61,9 @@ export const api = {
   /** POST /api/runs/{id}/fail?error_message=... — transition run to failed. */
   failRun: (runId: string, errorMessage: string) =>
     apiFetch<Run>(`/runs/${runId}/fail?error_message=${encodeURIComponent(errorMessage)}`, { method: "POST" }),
+  /** POST /api/runs/{id}/execute — execute an agent run. */
+  executeRun: (runId: string) =>
+    apiFetch<Run>(`/runs/${runId}/execute`, { method: "POST" }),
 
   /** GET /health — health check. */
   health: () =>

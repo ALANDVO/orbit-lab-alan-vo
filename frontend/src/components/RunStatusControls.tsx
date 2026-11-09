@@ -2,17 +2,17 @@
 
 import type { Run } from "../api/types";
 import { StateBadge } from "./StateBadge";
-
 interface Props {
   run: Run;
   onStart: () => void;
   onComplete: () => void;
   onFail: () => void;
   onCancel: () => void;
+  onExecute: () => void;
   error: string | null;
 }
 
-export function RunStatusControls({ run, onStart, onComplete, onFail, onCancel, error }: Props) {
+export function RunStatusControls({ run, onStart, onComplete, onFail, onCancel, onExecute, error }: Props) {
   const isPending = run.state === "pending";
   const isRunning = run.state === "running";
   const isTerminal = !isPending && !isRunning;
@@ -23,6 +23,9 @@ export function RunStatusControls({ run, onStart, onComplete, onFail, onCancel, 
 
       {isPending && (
         <>
+          <button className="btn btn-small btn-primary" onClick={onExecute}>
+            Execute
+          </button>
           <button className="btn btn-small btn-primary" onClick={onStart}>
             Start
           </button>
