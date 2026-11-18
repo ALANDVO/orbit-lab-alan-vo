@@ -1,6 +1,6 @@
 {
   "name": "orbit-lab-frontend",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "description": "Orbit Lab frontend \u2014 AI orchestrator for a fleet of coding agents",
   "private": true,
   "type": "module",
