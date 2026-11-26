@@ -40,7 +40,7 @@ Tests: `backend/tests/test_execution_service.py`
 
 ### auth-oidc — OIDC Authentication
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - Backend-managed sessions with HttpOnly SameSite cookies
